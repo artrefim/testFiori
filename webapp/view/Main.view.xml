@@ -1,0 +1,229 @@
+<mvc:View
+    controllerName="ZF_AV_AVERIAS.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ndc="sap.ndc"
+    displayBlock="true"
+>
+    <Page
+        id="mainPage"
+        class="sapUiSizeCozy"
+        title="{i18n>main.page.title}"
+        showHeader="true"
+        enableScrolling="true"
+    >
+        <headerContent>
+            <Button
+                icon="sap-icon://hint"
+                type="Transparent"
+                tooltip="{i18n>about.title}"
+                press=".onAboutPress"
+            />
+        </headerContent>
+        <content>
+            <!-- Contenedor general centrado -->
+            <FlexBox
+                width="100%"
+                justifyContent="Center"
+                alignItems="Start"
+                class="sapUiResponsiveContentPadding"
+            >
+                <VBox
+                    width="100%"
+                    class="faultFormContainer faultFormEnhanced"
+                >
+                    <!-- Formulario responsive -->
+                    <f:SimpleForm
+                        id="faultForm"
+                        editable="true"
+                        layout="ResponsiveGridLayout"
+                        labelSpanXL="3"
+                        labelSpanL="3"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="1"
+                        columnsL="1"
+                        columnsM="1"
+                        singleContainerFullSize="false"
+                    >
+                        <f:content>
+                            <!-- Descripción breve -->
+                            <Label
+                                text="{i18n>main.list.item.fault}"
+                                labelFor="shortFaultInput"
+                                required="true"
+                            />
+
+                            <Input
+                                id="shortFaultInput"
+                                class="faultFormField"
+                                type="Text"
+                                width="100%"
+                                value="{dataModel>/newFault/shortFault}"
+                                tooltip="{i18n>main.form.shortFault.tooltip}"
+                                maxLength="40"
+                                valueLiveUpdate="true"
+                                placeholder="{i18n>main.form.shortFault.placeholder}"
+                                liveChange="clearFieldError"
+                            />
+
+                            <!-- Tipo de avería -->
+                            <Label
+                                text="{i18n>main.list.item.type}"
+                                labelFor="faultTypeSelect"
+                                required="true"
+                            />
+
+                            <Select
+                                id="faultTypeSelect"
+                                class="faultFormField"
+                                width="100%"
+                                forceSelection="false"
+                                selectedKey="{dataModel>/newFault/type}"
+                                items="{dataTypesModel>/typesList}"
+                                change="clearFieldError"
+                                tooltip="{i18n>main.form.type.tooltip}"
+                            >
+                                <core:Item
+                                    key="{dataTypesModel>key}"
+                                    text="{dataTypesModel>text}"
+                                />
+                            </Select>
+
+                            <!-- Identificador del equipo -->
+                            <Label
+                                text="{i18n>main.list.item.number}"
+                                labelFor="equipmentInput"
+                                required="true"
+                            />
+
+                            <HBox
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                                class="faultFormField"
+                            >
+                                <Input
+                                    id="equipmentInput"
+                                    type="Text"
+                                    width="100%"
+                                    value="{dataModel>/newFault/number}"
+                                    maxLength="25"
+                                    valueLiveUpdate="true"
+                                    placeholder="{i18n>main.form.equipment.placeholder}"
+                                    liveChange="onEquipmentLiveChange"
+                                    tooltip="{i18n>main.form.equipment.tooltip}"
+                                >
+                                    <layoutData>
+                                        <FlexItemData
+                                            growFactor="1"
+                                            shrinkFactor="1"
+                                        />
+                                    </layoutData>
+                                </Input>
+
+                                <VBox
+                                    width="3rem"
+                                    alignItems="Stretch"
+                                    class="scannerContainer"
+                                >
+                                    <ndc:BarcodeScannerButton
+                                        id="equipmentBarcodeScannerButton"
+                                        width="100%"
+                                        scanSuccess="onScanSuccess"
+                                        scanFail="onScanError"
+                                        tooltip="{i18n>main.form.equipment.scan.tooltip}"
+                                    />
+                                </VBox>
+                            </HBox>
+
+                            <!-- Resultado de la identificación del equipo -->
+                            <Label />
+
+                            <VBox width="100%">
+                                <ObjectStatus
+                                    id="equipmentDescriptionStatus"
+                                    text="{dataModel>/newFault/equipmentDescription}"
+                                    state="{dataModel>/newFault/equipmentDescriptionState}"
+                                    visible="{= !!${dataModel>/newFault/equipmentDescription} &amp;&amp; !${dataModel>/newFault/equipmentSelectionRequired} }"
+                                />
+
+                                <Link
+                                    id="equipmentSelectionLink"
+                                    text="{i18n>main.equipment.selection.identifyEquipment}"
+                                    visible="{dataModel>/newFault/equipmentSelectionRequired}"
+                                    press="onEquipmentSelectionLinkPress"
+                                    tooltip="{i18n>main.equipment.selection.identifyEquipment.tooltip}"
+                                />
+                            </VBox>
+
+                            <!-- Descripción detallada de la avería -->
+                            <Label
+                                text="{i18n>main.list.item.description}"
+                                labelFor="descriptionTextArea"
+                                required="true"
+                            />
+
+                            <TextArea
+                                id="descriptionTextArea"
+                                class="faultFormField"
+                                width="100%"
+                                rows="5"
+                                growing="false"
+                                growingMaxLines="15"
+                                value="{dataModel>/newFault/description}"
+                                valueLiveUpdate="true"
+                                placeholder="{i18n>main.form.description.placeholder}"
+                                liveChange="clearFieldError"
+                                tooltip="{i18n>main.form.description.tooltip}"
+                            />
+
+                            <!-- Uso indebido o golpe -->
+                            <Label
+                                text="{i18n>main.form.damageCause}"
+                                labelFor="IsGolpeMalUsoCheckBox"
+                            />
+
+                            <CheckBox
+                                id="IsGolpeMalUsoCheckBox"
+                                class="faultFormField"
+                                text="{i18n>main.form.IsGolpeMalUso}"
+                                selected="{dataModel>/newFault/IsGolpeMalUso}"
+                                tooltip="{i18n>main.form.IsGolpeMalUso.tooltip}"
+                            />
+                        </f:content>
+                    </f:SimpleForm>
+                </VBox>
+            </FlexBox>
+        </content>
+
+        <footer>
+            <OverflowToolbar>
+                <Button
+                    id="myFaultsButton"
+                    text="{i18n>main.footer.btn.alerts}"
+                    icon="sap-icon://notification-2"
+                    type="Emphasized"
+                    press="onMyFaultsPress"
+                />
+
+                <ToolbarSpacer />
+
+                <Button
+                    id="sendFaultButton"
+                    text="{i18n>main.footer.btn.send}"
+                    icon="sap-icon://paper-plane"
+                    type="Emphasized"
+                    press="onSendPress"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

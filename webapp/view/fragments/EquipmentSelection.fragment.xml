@@ -1,0 +1,62 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="equipmentSelectionDialog"
+        title="{i18n>main.equipment.selection.title}"
+        contentWidth="38rem"
+        horizontalScrolling="false"
+        verticalScrolling="false"
+        resizable="true"
+        draggable="true"
+        afterClose="onEquipmentSelectionAfterClose"
+    >
+        <subHeader>
+            <Toolbar>
+                <SearchField
+                    id="equipmentSelectionSearch"
+                    width="100%"
+                    placeholder="{i18n>main.equipment.selection.searchPlaceholder}"
+                    liveChange="onEquipmentSelectionSearch"
+                />
+            </Toolbar>
+        </subHeader>
+
+        <content>
+            <List
+                id="equipmentSelectionList"
+                class="equipmentSelectionList"
+                mode="SingleSelectMaster"
+                includeItemInSelection="true"
+                selectionChange="onEquipmentSelectionChange"
+                noDataText="{i18n>main.equipment.selection.noData}"
+                items="{equipmentCandidates>/items}"
+            >
+                <StandardListItem
+                    title="{equipmentCandidates>DescripcionEquipo}"
+                    description="{equipmentCandidates>EquipmentInformation}"
+                    info="{equipmentCandidates>Centro}"
+                    infoState="Information"
+                    type="Active"
+                />
+            </List>
+        </content>
+
+        <beginButton>
+            <Button
+                text="{i18n>main.equipment.selection.accept}"
+                type="Emphasized"
+                enabled="false"
+                press="onEquipmentSelectionConfirm"
+            />
+        </beginButton>
+
+        <endButton>
+            <Button
+                text="{i18n>main.equipment.selection.cancel}"
+                press="onEquipmentSelectionCancel"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

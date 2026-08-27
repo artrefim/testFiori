@@ -1,0 +1,161 @@
+{
+    "_version": "1.7.0",
+    "sap.app": {
+        "id": "ZF_AV_AVERIAS",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.1.0"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "sourceTemplate": {
+            "id": "ui5template.basicSAPUI5ApplicationProject",
+            "version": "1.40.12",
+            "toolsId": "9fd1d5b5-ecf8-4b97-8a48-dfd65996b259"
+        },
+        "dataSources": {
+            "ZGW_PM_AVISOS_AVERIAS_SRV": {
+                "uri": "/sap/opu/odata/sap/ZGW_PM_AVISOS_AVERIAS_SRV/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "fullWidth": true,
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        },
+        "supportedThemes": [
+            "sap_hcb",
+            "sap_belize",
+            "sap_horizon",
+            "sap_horizon_dark",
+            "sap_fiori_3",
+            "sap_fiori_3_dark",
+            "sap_horizon_hcb",
+            "sap_fiori_3_hcw"
+        ]
+    },
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "ZF_AV_AVERIAS.view.App",
+            "type": "XML"
+        },
+        "dependencies": {
+            "minUI5Version": "1.84.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.ui.layout": {},
+                "sap.ushell": {},
+                "sap.ndc": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "ZF_AV_AVERIAS.i18n.i18n"
+                }
+            },
+            "ZGW_PM_AVISOS_AVERIAS_SRV": {
+                "type": "sap.ui.model.odata.v2.ODataModel",
+                "settings": {
+                    "defaultOperationMode": "",
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "",
+                    "useBatch": false
+                },
+                "dataSource": "ZGW_PM_AVISOS_AVERIAS_SRV",
+                "preload": true
+            },
+            "dataTypesModel": {
+                "type": "sap.ui.model.json.JSONModel",
+                "uri": "model/model.json"
+            },
+            "dataModel": {
+                "type": "sap.ui.model.json.JSONModel"
+            },
+            "changelog": {
+                "type": "sap.ui.model.json.JSONModel",
+                "uri": "model/changelog.json"
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "controlId": "app",
+                "viewPath": "ZF_AV_AVERIAS.view",
+                "controlAggregation": "pages",
+                "viewType": "XML",
+                "transition": "slide",
+                "clearAggregation": false,
+                "clearControlAggregation": false
+            },
+            "targets": {
+                "Main": {
+                    "viewName": "Main",
+                    "viewLevel": 1
+                },
+                "MyFaults": {
+                    "viewName": "MyFaults",
+                    "viewLevel": 2
+                },
+                "About": {
+                    "viewName": "About",
+                    "viewLevel": 3
+                }
+            },
+            "routes": [
+                {
+                    "name": "Main",
+                    "pattern": "",
+                    "target": "Main",
+                    "greedy": false
+                },
+                {
+                    "name": "MyFaults",
+                    "pattern": "MyFaults",
+                    "target": "MyFaults",
+                    "greedy": false
+                },
+                {
+                    "name": "About",
+                    "pattern": "about",
+                    "target": "About"
+                }
+            ]
+        }
+    },
+    "sap.platform.abap": {
+        "uri": "/sap/bc/ui5_ui5/sap/zf_av_averias",
+        "_version": "1.1.0"
+    }
+}

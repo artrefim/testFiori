@@ -1,0 +1,434 @@
+/* Enter your custom styles here */
+
+.h4Text {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+/* Dimensiones del formulario */
+.faultFormContainer {
+    width: 100%;
+    max-width: 56rem;
+    position: relative;
+    padding-top: 1rem;
+    left: -6rem;
+}
+
+@media (max-width: 900px) {
+    .faultFormContainer {
+        left: -3rem;
+    }
+}
+
+@media (max-width: 800px) {
+    .faultFormContainer {
+        left: -2rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .faultFormContainer {
+        left: -1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .faultFormContainer {
+        left: 0;
+    }
+}
+
+.faultScannerButton .sapMBtnInner {
+    min-width: 3.5rem;
+}
+
+/* Textos introducidos y seleccionados */
+.faultFormEnhanced .sapMInputBaseInner,
+.faultFormEnhanced .sapMSltLabel,
+.faultFormEnhanced .sapMTextAreaInner {
+    font-size: 0.85rem;
+}
+
+/* Etiquetas del formulario */
+.faultFormEnhanced .sapMLabel {
+    font-size: 0.85rem;
+}
+
+/* Texto del checkbox */
+.faultFormEnhanced .sapMCbLabel {
+    font-size: 0.85rem;
+}
+
+.scannerContainer {
+    flex: 0 0 2.65rem;
+    margin-left: 0.5rem !important;
+}
+
+.scannerContainer .sapMBtn,
+.scannerContainer .sapMBtnBase,
+.scannerContainer .sapMBtnInner {
+    width: 100%;
+}
+
+
+/* Animación del campo Descripción */
+.descriptionTextAreaAnimated {
+    transition: height 0.25s ease-in-out;
+    overflow-y: auto;
+    resize: none;
+}
+
+
+/*
+ * Lista de selección de equipos escaneados.
+ *
+ * Una fila StandardListItem ocupa aproximadamente 4,5 rem.
+ * Se muestran como máximo tres filas y media para indicar
+ * visualmente que existen más resultados.
+ */
+.equipmentSelectionList {
+    max-height: 15.75rem;
+    overflow-y: auto;
+}
+
+/*
+ * Evitar una anchura excesiva en pantallas estrechas.
+ */
+.sapUiSizeCompact .equipmentSelectionList {
+    width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .equipmentSelectionList {
+        max-height: 15.75rem;
+    }
+
+}
+
+.myFaultsPageContent {
+    box-sizing: border-box;
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+.myFaultsFilterContainer,
+.myFaultsTable {
+    background: var(--sapGroup_ContentBackground);
+}
+
+.myFaultsFilterContainer {
+    padding: 1rem;
+    border-bottom: 1px solid var(--sapGroup_ContentBorderColor);
+}
+
+.myFaultsTable {
+    box-shadow: var(--sapContent_Shadow0);
+}
+
+.myFaultsTable .sapMListTblHeaderCell {
+    background: var(--sapList_HeaderBackground);
+}
+
+.myFaultsTable .sapMListTblCell {
+    vertical-align: middle;
+}
+
+/* ==========================================================
+   Página Acerca de
+   ========================================================== */
+
+.aboutPageContent {
+    max-width: 60rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.aboutApplicationHeader {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--sapGroup_ContentBackground);
+}
+
+.aboutApplicationIcon {
+    color: var(--sapContent_IconColor);
+}
+
+.aboutApplicationInformation {
+    min-width: 0;
+}
+
+.aboutApplicationDescription {
+    color: var(--sapContent_LabelColor);
+}
+
+.aboutSectionToolbar {
+    padding-right: 0;
+    padding-left: 0;
+    border-bottom: 0;
+}
+
+.aboutVersionPanel {
+    border-radius: 0.25rem;
+}
+
+.aboutVersionDate {
+    margin-bottom: 0.2rem;
+    color: var(--sapContent_LabelColor, #6a6d70) !important;
+    font-size: 0.875rem;
+    padding-bottom: 0.75rem;
+}
+
+.aboutChangeIcon {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--sapContent_IconColor);
+}
+
+/* ==========================================================
+   Página Acerca de
+   ========================================================== */
+
+/* Fondo uniforme de la página */
+
+.aboutPage,
+.aboutPage .sapMPage,
+.aboutPage .sapMPageBgStandard,
+.aboutPage .sapMPageEnableScrolling {
+    background-color: var(--sapBackgroundColor);
+}
+
+/* ==========================================================
+   Contenedores generales
+   ========================================================== */
+
+/*
+ * Espaciado exterior de la página.
+ * El ancho máximo se controla en aboutPageContent.
+ */
+
+.aboutPageOuterContainer {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2rem;
+}
+
+/*
+ * Contenido centrado y adaptable.
+ * overflow-x evita desplazamientos horizontales causados
+ * por controles internos de sap.m.Panel o sap.m.List.
+ */
+
+.aboutPageContent {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 64rem;
+    margin-right: auto;
+    margin-left: auto;
+    overflow-x: hidden;
+}
+
+/* ==========================================================
+   Cabecera de la aplicación
+   ========================================================== */
+
+.aboutApplicationHeader {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+/*
+ * La separación respecto al grupo de título, versión y
+ * descripción se controla aquí, sin depender de las clases
+ * auxiliares de margen del tema.
+ */
+
+.aboutApplicationImage {
+    flex: 0 0 auto;
+    width: 5rem !important;
+    height: 6rem !important;
+    margin-inline-end: 2rem !important;
+    object-fit: contain;
+}
+
+.aboutApplicationInformation {
+    min-width: 0;
+}
+
+.aboutApplicationDescription {
+    color: var(--sapContent_LabelColor);
+}
+
+/* ==========================================================
+   Título del historial
+   ========================================================== */
+
+.aboutSectionTitle {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+/* ==========================================================
+   Paneles de versión
+   ========================================================== */
+
+.aboutVersionPanel {
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--sapGroup_ContentBorderColor);
+    background-color: transparent;
+}
+
+/*
+ * Espaciado general del contenido del panel.
+ * No se utiliza margen en controles internos para evitar
+ * superar el 100 % del ancho disponible.
+ */
+
+.aboutVersionPanel .sapMPanelContent {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem 1rem 0.75rem;
+    overflow-x: hidden;
+    border-bottom: 0;
+    background-color: transparent;
+}
+
+/* Barra que contiene el título de versión y el estado Actual */
+
+.aboutVersionToolbar {
+    box-sizing: border-box;
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+.aboutVersionHeader {
+    min-width: 0;
+}
+
+.aboutVersionTitle {
+    min-width: 0;
+}
+
+.aboutCurrentBadge {
+    flex-shrink: 0;
+    margin-inline-start: 0.75rem;
+}
+
+/*
+ * Indentación común de la fecha y la lista.
+ * De esta forma ambos elementos comienzan a la derecha
+ * del eje vertical indicado y quedan alineados entre sí.
+ */
+
+.aboutVersionContent {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding-inline-start: 2rem;
+}
+
+/*Fecha de publicación*/
+.aboutVersionDate {
+    margin-bottom: 0.35rem;
+    color: var(--sapContent_LabelColor, #6a6d70) !important;
+    font-size: 0.875rem;
+}
+
+/*Lista de cambios */
+.aboutChangesText {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    line-height: 1.7;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* ==========================================================
+   Información adicional
+   ========================================================== */
+
+.aboutInformationPanel {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--sapGroup_ContentBorderColor);
+    background-color: transparent;
+}
+
+.aboutInformationPanel .sapMPanelContent {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem 2rem;
+    overflow-x: hidden;
+    border-bottom: 0;
+    background-color: transparent;
+}
+
+.aboutInformationContent {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+}
+
+/* ==========================================================
+   Adaptación para tablet
+   ========================================================== */
+
+@media screen and (max-width: 64rem) {
+
+    .aboutPageOuterContainer {
+        padding: 1.5rem;
+    }
+
+}
+
+/* ==========================================================
+   Adaptación para teléfono
+   ========================================================== */
+
+@media screen and (max-width: 37.5rem) {
+
+    .aboutPageOuterContainer {
+        padding: 1rem;
+    }
+
+    .aboutApplicationHeader {
+        align-items: flex-start;
+    }
+
+    .aboutApplicationImage {
+        width: 3rem !important;
+        height: 3rem !important;
+        margin-inline-end: 0.75rem !important;
+    }
+
+    .aboutVersionPanel .sapMPanelContent {
+        padding-right: 0.25rem;
+        padding-left: 0.25rem;
+    }
+
+    /*
+     * Se reduce ligeramente la indentación para conservar
+     * espacio útil en pantallas estrechas.
+     */
+
+    .aboutVersionContent {
+        padding-inline-start: 1.5rem;
+    }
+
+    .aboutInformationPanel .sapMPanelContent {
+        padding-right: 0.25rem;
+        padding-left: 1.25rem;
+    }
+
+}

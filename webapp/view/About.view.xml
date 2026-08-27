@@ -1,0 +1,194 @@
+<mvc:View
+    controllerName="ZF_AV_AVERIAS.controller.About"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="aboutPage"
+        title="{i18n>about.title}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        enableScrolling="true"
+        class="aboutPage"
+    >
+        <content>
+            <VBox
+                width="100%"
+                class="aboutPageOuterContainer"
+            >
+                <VBox
+                    width="100%"
+                    class="aboutPageContent"
+                >
+                    <!-- ==================================================
+                         Cabecera de la aplicación
+                         ================================================== -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        class="aboutApplicationHeader"
+                    >
+                        <Image
+                            src="{about>/imageSrc}"
+                            width="4rem"
+                            height="4rem"
+                            densityAware="false"
+                            decorative="false"
+                            alt="{i18n>about.applicationImage.alt}"
+                            class="aboutApplicationImage"
+                        />
+
+                        <VBox
+                            width="100%"
+                            class="aboutApplicationInformation"
+                        >
+                            <Title
+                                text="{i18n>about.applicationName}"
+                                level="H2"
+                                wrapping="true"
+                            />
+
+                            <ObjectStatus
+                                text="{= ${i18n>about.currentVersion} + ' ' + ${about>/version} }"
+                                state="Success"
+                                inverted="true"
+                                class="sapUiTinyMarginTop"
+                            />
+
+                            <Text
+                                text="{i18n>about.applicationDescription}"
+                                wrapping="true"
+                                width="100%"
+                                class="aboutApplicationDescription sapUiSmallMarginTop"
+                            />
+                        </VBox>
+                    </HBox>
+
+                    <!-- ==================================================
+                         Historial de versiones
+                         ================================================== -->
+
+                    <Title
+                        text="{i18n>about.versionHistory}"
+                        level="H3"
+                        class="aboutSectionTitle"
+                    />
+
+                    <VBox
+                        width="100%"
+                        items="{
+                            path: 'changelog>/versions'
+                        }"
+                    >
+                        <items>
+                            <Panel
+                                width="100%"
+                                expandable="true"
+                                expanded="{changelog>expanded}"
+                                backgroundDesign="Transparent"
+                                class="aboutVersionPanel"
+                            >
+                                <headerToolbar>
+                                    <Toolbar
+                                        design="Transparent"
+                                        class="aboutVersionToolbar"
+                                    >
+                                        <HBox
+                                            alignItems="Center"
+                                            renderType="Bare"
+                                            class="aboutVersionHeader"
+                                        >
+                                            <Title
+                                                text="{
+                                                    path: 'changelog>version',
+                                                    formatter: '.formatVersionTitle'
+                                                }"
+                                                level="H4"
+                                                wrapping="true"
+                                                class="aboutVersionTitle"
+                                            />
+
+                                            <ObjectStatus
+                                                text="{i18n>about.currentBadge}"
+                                                state="Success"
+                                                inverted="true"
+                                                visible="{changelog>current}"
+                                                class="aboutCurrentBadge"
+                                            />
+                                        </HBox>
+                                    </Toolbar>
+                                </headerToolbar>
+
+                                <content>
+                                    <VBox
+                                        width="100%"
+                                        class="aboutVersionContent"
+                                    >
+                                        <Text
+                                            text="{
+                                                path: 'changelog>date',
+                                                formatter: '.formatVersionDate'
+                                            }"
+                                            visible="{= !!${changelog>date} }"
+                                            wrapping="true"
+                                            width="100%"
+                                            class="aboutVersionDate"
+                                        />
+
+                                        <Text
+                                            text="{
+        path: 'changelog>changesKey',
+        formatter: '.formatChangeText'
+    }"
+                                            width="100%"
+                                            wrapping="true"
+                                            renderWhitespace="true"
+                                            class="aboutChangesText"
+                                        />
+                                    </VBox>
+                                </content>
+                            </Panel>
+                        </items>
+                    </VBox>
+
+                    <!-- ==================================================
+                         Información de la aplicación
+                         ================================================== -->
+
+                    <Panel
+                        width="100%"
+                        expandable="true"
+                        expanded="false"
+                        backgroundDesign="Transparent"
+                        headerText="{i18n>about.additionalInformation}"
+                        class="aboutInformationPanel"
+                    >
+                        <content>
+                            <VBox
+                                width="100%"
+                                class="aboutInformationContent"
+                            >
+                                <ObjectAttribute
+                                    title="{i18n>about.applicationId}"
+                                    text="ZF_AV_AVERIAS"
+                                />
+
+                                <ObjectAttribute
+                                    title="{i18n>about.functionalArea}"
+                                    text="{i18n>about.functionalArea.value}"
+                                />
+
+                                <ObjectAttribute
+                                    title="{i18n>about.versionLabel}"
+                                    text="{about>/version}"
+                                />
+                            </VBox>
+                        </content>
+                    </Panel>
+                </VBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

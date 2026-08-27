@@ -1,0 +1,36 @@
+<mvc:View controllerName="ZF_AV_AVERIAS.controller.MyFaults" 
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns="sap.m" 
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" 
+	displayBlock="true">
+	<Page title="{i18n>myFaults.title}" showNavButton="true" navButtonPress="navBack">
+		<List id="MyFaultsList" items="{dataModel>/MyFaultsList}">
+            <headerToolbar>
+                <Toolbar design="Solid">
+                    <content>
+                        <SearchField value="" placeholder="{i18n>myFaults.list.placeholder.lbl.search}" search="onIcnPressSearchFault"/>
+                    </content>
+                </Toolbar>
+            </headerToolbar>
+            <CustomListItem press="onItmPressMyFaultsList" type="Active">
+	            <HBox class="sapUiTinyMarginBegin">
+	                <VBox width="90%" class="sapUiTinyMarginBegin">
+	                	<Text text="{dataModel>Qmnum}" class="sapUiSmallMarginTop h4Text"/>
+	                    <Text maxLines="2" text="{dataModel>Qmtxt}" class="sapUiTinyMarginTop"/>
+	                    <Text text="{i18n>myFaults.list.lbl.numOr}: {dataModel>Aufnr}" class="sapUiTinyMarginTop"/>
+	                    <HBox class="sapUiTinyMarginTop">
+	                    	<Text text="{i18n>myFaults.list.lbl.den}: {dataModel>Estat}"/>
+	                    	<Text text="{i18n>myFaults.list.lbl.cl}: {dataModel>Qmart}" class="sapUiSmallMarginBegin"/>
+                        </HBox>
+	                    <Text text="{i18n>myFaults.list.lbl.dtFault}: {path: 'dataModel>Qmdat',
+																		type: 'sap.ui.model.type.Date',
+																		formatOptions: {
+																			pattern: 'dd/MM/yyyy'
+																		}}" class="sapUiTinyMarginTop"/>
+	                </VBox>
+	            </HBox>
+            </CustomListItem>
+        </List>
+	</Page>
+</mvc:View>

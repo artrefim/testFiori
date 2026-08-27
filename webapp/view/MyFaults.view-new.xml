@@ -1,0 +1,293 @@
+<mvc:View
+    controllerName="ZF_AV_AVERIAS.controller.MyFaults"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+>
+    <Page
+        id="myFaultsPage"
+        title="{i18n>myFaults.title}"
+        showNavButton="true"
+        navButtonPress="navBack"
+        class="sapUiSizeCozy"
+        enableScrolling="true"
+    >
+        <content>
+            <!-- Contenedor centrado con márgenes exteriores -->
+            <VBox
+                width="100%"
+                class="sapUiResponsiveContentPadding myFaultsPageContent"
+            >
+                <!-- Barra superior de búsqueda y filtros -->
+                <VBox class="myFaultsFilterContainer">
+                    <OverflowToolbar class="sapUiTinyMarginBottom">
+                        <SearchField
+                            id="myFaultsSearchField"
+                            width="24rem"
+                            placeholder="{i18n>myFaults.list.placeholder.lbl.search}"
+                            liveChange="onSearchFault"
+                            search="onSearchFault"
+                        />
+
+                        <ToolbarSpacer />
+
+                        <ToggleButton
+                            id="showFiltersButton"
+                            text="{i18n>myFaults.filters.show}"
+                            icon="sap-icon://filter"
+                            type="Transparent"
+                            press="onToggleFilters"
+                        />
+
+                        <Button
+                            id="clearFiltersButton"
+                            text="{i18n>myFaults.filters.clear}"
+                            type="Transparent"
+                            press="onClearFilters"
+                        />
+                    </OverflowToolbar>
+
+                    <!-- Barra de filtros desplegable -->
+                    <VBox
+                        id="myFaultsFilterBar"
+                        visible="{myFaultsView>/filtersVisible}"
+                        class="sapUiSmallMarginBottom"
+                    >
+                        <HBox
+                            width="100%"
+                            wrap="Wrap"
+                            alignItems="End"
+                            renderType="Bare"
+                        >
+                            <VBox
+                                width="18rem"
+                                class="sapUiSmallMarginEnd sapUiTinyMarginBottom"
+                            >
+                                <Label
+                                    text="{i18n>myFaults.filters.date}"
+                                    labelFor="notificationDateFilter"
+                                />
+
+                                <DateRangeSelection
+                                    id="notificationDateFilter"
+                                    width="100%"
+                                    displayFormat="dd/MM/yyyy"
+                                    delimiter=" - "
+                                    change="onFilterChange"
+                                />
+                            </VBox>
+
+                            <VBox
+                                width="15rem"
+                                class="sapUiSmallMarginEnd sapUiTinyMarginBottom"
+                            >
+                                <Label
+                                    text="{i18n>myFaults.filters.status}"
+                                    labelFor="notificationStatusFilter"
+                                />
+
+                                <Input
+                                    id="notificationStatusFilter"
+                                    width="100%"
+                                    valueLiveUpdate="true"
+                                    liveChange="onFilterChange"
+                                    placeholder="{i18n>myFaults.filters.status.placeholder}"
+                                />
+                            </VBox>
+
+                            <VBox
+                                width="12rem"
+                                class="sapUiSmallMarginEnd sapUiTinyMarginBottom"
+                            >
+                                <Label
+                                    text="{i18n>myFaults.filters.type}"
+                                    labelFor="notificationTypeFilter"
+                                />
+
+                                <Input
+                                    id="notificationTypeFilter"
+                                    width="100%"
+                                    valueLiveUpdate="true"
+                                    liveChange="onFilterChange"
+                                    placeholder="{i18n>myFaults.filters.type.placeholder}"
+                                />
+                            </VBox>
+
+                            <VBox
+                                width="15rem"
+                                class="sapUiSmallMarginEnd sapUiTinyMarginBottom"
+                            >
+                                <Label
+                                    text="{i18n>myFaults.filters.order}"
+                                    labelFor="notificationOrderFilter"
+                                />
+
+                                <Input
+                                    id="notificationOrderFilter"
+                                    width="100%"
+                                    valueLiveUpdate="true"
+                                    liveChange="onFilterChange"
+                                    placeholder="{i18n>myFaults.filters.order.placeholder}"
+                                />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Tabla de avisos -->
+                <Table
+                    id="MyFaultsList"
+                    width="100%"
+                    items="{dataModel>/MyFaultsList}"
+                    inset="false"
+                    mode="None"
+                    growing="true"
+                    growingScrollToLoad="true"
+                    growingThreshold="20"
+                    sticky="HeaderToolbar,ColumnHeaders"
+                    noDataText="{i18n>myFaults.list.noData}"
+                    updateFinished="onTableUpdateFinished"
+                    itemPress="onItmPressMyFaultsList"
+                    class="myFaultsTable"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title
+                                id="myFaultsTableTitle"
+                                text="{
+                                    parts: [
+                                        'i18n>myFaults.list.title',
+                                        'myFaultsView>/resultCount'
+                                    ],
+                                    formatter: '.formatTableTitle'
+                                }"
+                                level="H2"
+                            />
+
+                            <ToolbarSpacer />
+
+                            <Button
+                                id="exportMyFaultsButton"
+                                icon="sap-icon://excel-attachment"
+                                text="{i18n>myFaults.export}"
+                                type="Transparent"
+                                tooltip="{i18n>myFaults.export.tooltip}"
+                                press="onExportPress"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+
+                    <columns>
+                        <!-- Descripción principal y número de aviso secundario -->
+                        <Column
+                            id="descriptionColumn"
+                            width="24rem"
+                            minScreenWidth="Phone"
+                            demandPopin="false"
+                        >
+                            <Text text="{i18n>myFaults.list.lbl.den}" />
+                        </Column>
+
+                        <!-- Estado -->
+                        <Column
+                            id="statusColumn"
+                            width="14rem"
+                            minScreenWidth="Tablet"
+                            demandPopin="true"
+                            popinDisplay="Inline"
+                        >
+                            <Text text="{i18n>myFaults.list.lbl.status}" />
+                        </Column>
+
+                        <!-- Clase -->
+                        <Column
+                            id="typeColumn"
+                            width="10rem"
+                            minScreenWidth="Tablet"
+                            demandPopin="true"
+                            popinDisplay="Inline"
+                        >
+                            <Text text="{i18n>myFaults.list.lbl.cl}" />
+                        </Column>
+
+                        <!-- Fecha -->
+                        <Column
+                            id="dateColumn"
+                            width="11rem"
+                            hAlign="Center"
+                            minScreenWidth="Tablet"
+                            demandPopin="true"
+                            popinDisplay="Inline"
+                        >
+                            <Text text="{i18n>myFaults.list.lbl.dtFault}" />
+                        </Column>
+
+                        <!-- Orden -->
+                        <Column
+                            id="orderColumn"
+                            width="12rem"
+                            hAlign="End"
+                            minScreenWidth="Desktop"
+                            demandPopin="true"
+                            popinDisplay="Inline"
+                        >
+                            <Text text="{i18n>myFaults.list.lbl.numOr}" />
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem
+                            type="Navigation"
+                            vAlign="Middle"
+                        >
+                            <cells>
+                                <!-- Descripción como información principal -->
+                                <ObjectIdentifier
+                                    title="{dataModel>Qmtxt}"
+                                    text="{
+                                        parts: [
+                                            'i18n>myFaults.list.lbl.notification',
+                                            'dataModel>Qmnum'
+                                        ],
+                                        formatter: '.formatNotificationNumber'
+                                    }"
+                                />
+
+                                <!-- Estado -->
+                                <ObjectStatus
+                                    text="{dataModel>Estat}"
+                                    state="{
+                                        path: 'dataModel>Estat',
+                                        formatter: '.formatNotificationState'
+                                    }"
+                                />
+
+                                <!-- Clase de aviso -->
+                                <Text text="{dataModel>Qmart}" />
+
+                                <!-- Fecha -->
+                                <Text
+                                    text="{
+                                        path: 'dataModel>Qmdat',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            pattern: 'dd/MM/yyyy'
+                                        }
+                                    }"
+                                    textAlign="Center"
+                                />
+
+                                <!-- Número de orden -->
+                                <ObjectNumber
+                                    number="{dataModel>Aufnr}"
+                                    emphasized="false"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

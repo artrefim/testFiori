@@ -1,0 +1,16 @@
+{
+  "typesList": [
+    {
+      "key": "AF",
+      "text": "Avería Fortuita"
+    },
+    {
+      "key": "SV",
+      "text": "Solicitud de servicio"
+    },
+    {
+      "key": "AL",
+      "text": "Observaciones preventivas"
+    }
+  ]
+}
