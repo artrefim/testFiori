@@ -203,10 +203,13 @@ sap.ui.define([
                 });
         },
         /*
-         * Mantener en un único modelo los candidatos disponibles.
-         */
+/*
+ * Mantener en un único modelo los candidatos disponibles.
+ */
         _setEquipmentCandidates: function (aCandidates) {
-            let oCandidatesModel = this.getView().getModel("equipmentCandidates");
+            let oCandidatesModel = this.getView().getModel(
+                "equipmentCandidates"
+            );
 
             if (!oCandidatesModel) {
                 oCandidatesModel = new JSONModel({
@@ -214,23 +217,70 @@ sap.ui.define([
                     selectedCandidate: null
                 });
 
-                this.getView().setModel(oCandidatesModel, "equipmentCandidates");
+                this.getView().setModel(
+                    oCandidatesModel,
+                    "equipmentCandidates"
+                );
             }
 
-            const aFormattedCandidates = (aCandidates || []).map((oCandidate) => ({
-                ...oCandidate,
-                EquipmentInformation: [
-                    oCandidate.EquipoSAP,
-                    oCandidate.Centro,
-                    oCandidate.NombreCentro
-                ]
-                    .map((sValue) => String(sValue || "").trim())
-                    .filter(Boolean)
-                    .join("  ·  ")
-            }));
+            const aFormattedCandidates = (aCandidates || []).map(
+                (oCandidate) => {
+                    const sEquipmentSAP = String(
+                        oCandidate.EquipoSAP || ""
+                    ).trim();
+                    const sFunctionalLocation = String(
+                        oCandidate.UbicacionTecnica || ""
+                    ).trim();
+                    const sFunctionalLocationDescription = String(
+                        oCandidate.DescripcionUbicacionTecnica || ""
+                    ).trim();
+                    const sCenterName = String(
+                        oCandidate.NombreCentro || ""
+                    ).trim();
 
-            oCandidatesModel.setProperty("/items", aFormattedCandidates);
-            oCandidatesModel.setProperty("/selectedCandidate", null);
+                    /*
+                     * Mostrar la ubicación técnica solo cuando el equipo está montado.
+                     * El centro no se incluye porque ya aparece como información
+                     * independiente a la derecha.
+                     */
+                    const sLocationInformation = sFunctionalLocation
+                        && sFunctionalLocationDescription
+                        ? sFunctionalLocationDescription
+                        : "";
+
+                    const sCenterInformation = sCenterName
+                        ? `(${sCenterName})`
+                        : "";
+
+                    const sEquipmentInformation = [
+                        sEquipmentSAP,
+                        sLocationInformation
+                    ]
+                        .filter(Boolean)
+                        .join("  ·  ");
+
+                    return {
+                        ...oCandidate,
+
+                        EquipmentInformation: [
+                            sEquipmentInformation,
+                            sCenterInformation
+                        ]
+                            .filter(Boolean)
+                            .join(" ")
+                    };
+                }
+            );
+
+            oCandidatesModel.setProperty(
+                "/items",
+                aFormattedCandidates
+            );
+
+            oCandidatesModel.setProperty(
+                "/selectedCandidate",
+                null
+            );
         },
 
         /*
