@@ -26,7 +26,7 @@ sap.ui.define([
     return Controller.extend("ZF_AV_AVERIAS.controller.Main", {
         onInit: function () {
             this._iEquipmentRequestId = 0;
-            this._iEquipmentValidationTimer = null;
+            this._equipmentValidationTimer = null;
 
             this.getRouter()
                 .getRoute(Constants.VIEWS.MAIN)
@@ -242,6 +242,7 @@ sap.ui.define([
 
             oModel.setProperty("/newFault/equipmentSAP", "");
             oModel.setProperty("/newFault/center", "");
+            oModel.setProperty("/newFault/equipmentActive", false);
             oModel.setProperty("/newFault/equipmentDescription", "");
             oModel.setProperty("/newFault/equipmentDescriptionState", "None");
             oModel.setProperty("/newFault/equipmentSelectionRequired", true);
@@ -253,31 +254,131 @@ sap.ui.define([
         },
 
         /*
-         * Aplicar el candidato seleccionado y conservar el centro internamente.
-         */
+        * Aplicar el candidato seleccionado y conservar el centro internamente.
+        */
         _applyEquipment: function (oCandidate) {
             const oModel = this.getView().getModel(Constants.MODELS.DATA);
             const oEquipmentInput = this.byId("equipmentInput");
-            const sIdentifier = String(oCandidate.IdentificadorEquipo || "").trim();
-            const sEquipmentSAP = String(oCandidate.EquipoSAP || "").trim();
-            const sCenter = String(oCandidate.Centro || "").trim();
-            const sCenterName = String(oCandidate.NombreCentro || "").trim();
-            const sDescription = String(oCandidate.DescripcionEquipo || "").trim();
-            const sEquipmentInformation = [sDescription, sCenter, sCenterName].filter(Boolean).join("  ·  ");
+            const sIdentifier = String(
+                oCandidate.IdentificadorEquipo || ""
+            ).trim();
+            const sEquipmentSAP = String(
+                oCandidate.EquipoSAP || ""
+            ).trim();
+            const sCenter = String(
+                oCandidate.Centro || ""
+            ).trim();
+            const sCenterName = String(
+                oCandidate.NombreCentro || ""
+            ).trim();
+            const sDescription = String(
+                oCandidate.DescripcionEquipo || ""
+            ).trim();
+            const sFunctionalLocation = String(
+                oCandidate.UbicacionTecnica || ""
+            ).trim();
+            const sFunctionalLocationDescription = String(
+                oCandidate.DescripcionUbicacionTecnica || ""
+            ).trim();
+            const bEquipmentActive = oCandidate.IsActivo === true;
 
-            if (sIdentifier) {
-                oModel.setProperty("/newFault/number", sIdentifier);
+            /*
+             * Componer el centro en formato:
+             * 2220, Astillero Fene-Ferrol
+             */
+            const sCenterInformation = [
+                sCenter,
+                sCenterName
+            ]
+                .filter(Boolean)
+                .join(", ");
+
+            /*
+             * Añadir la ubicación técnica únicamente cuando el equipo
+             * está montado y dispone de una denominación.
+             */
+            const aEquipmentInformation = [
+                sDescription
+            ];
+
+            if (sFunctionalLocation && sFunctionalLocationDescription) {
+                aEquipmentInformation.push(
+                    sFunctionalLocationDescription
+                );
             }
 
-            oModel.setProperty("/newFault/equipmentSAP", sEquipmentSAP);
-            oModel.setProperty("/newFault/center", sCenter);
-            oModel.setProperty("/newFault/equipmentDescription", sEquipmentInformation);
-            oModel.setProperty("/newFault/equipmentDescriptionState", "Success");
-            oModel.setProperty("/newFault/equipmentSelectionRequired", false);
+            /*
+             * El centro se muestra siempre entre paréntesis.
+             */
+            if (sCenterInformation) {
+                const iLastPosition = aEquipmentInformation.length - 1;
+
+                aEquipmentInformation[iLastPosition] =
+                    `${aEquipmentInformation[iLastPosition]} (${sCenterInformation})`;
+            }
+
+            const sEquipmentInformation = aEquipmentInformation
+                .map((sValue) => String(sValue || "").trim())
+                .filter(Boolean)
+                .join(" · ");
+
+            if (sIdentifier) {
+                oModel.setProperty(
+                    "/newFault/number",
+                    sIdentifier
+                );
+            }
+
+            oModel.setProperty(
+                "/newFault/equipmentSAP",
+                sEquipmentSAP
+            );
+
+            oModel.setProperty(
+                "/newFault/center",
+                sCenter
+            );
+
+            oModel.setProperty(
+                "/newFault/functionalLocation",
+                sFunctionalLocation
+            );
+
+            oModel.setProperty(
+                "/newFault/functionalLocationDescription",
+                sFunctionalLocationDescription
+            );
+
+            oModel.setProperty(
+                "/newFault/equipmentActive",
+                bEquipmentActive
+            );
+
+            oModel.setProperty(
+                "/newFault/equipmentDescription",
+                sEquipmentInformation
+            );
+
+            oModel.setProperty(
+                "/newFault/equipmentDescriptionState",
+                bEquipmentActive ? "Success" : "Error"
+            );
+
+            oModel.setProperty(
+                "/newFault/equipmentSelectionRequired",
+                false
+            );
 
             if (oEquipmentInput) {
-                oEquipmentInput.setValueState("None");
-                oEquipmentInput.setValueStateText("");
+                oEquipmentInput.setValueState(
+                    bEquipmentActive ? "None" : "Error"
+                );
+
+                oEquipmentInput.setValueStateText(
+                    bEquipmentActive
+                        ? ""
+                        : this.getText("main.equipment.inactive")
+                );
             }
 
             oModel.checkUpdate(true);
@@ -472,22 +573,85 @@ sap.ui.define([
             this.showErrorMessageService(oEvent);
         },
 
+        // /*
+        //  * Validar autorización y campos obligatorios antes del envío.
+        //  */
+        // onSendPress: function () {
+        //     if (!UserContext.isAllowed()) {
+        //         const sMessage = UserContext.getErrorMessage()
+        //             || this.getText("main.action.userValidation.error.generic");
+
+        //         this.showErrorMessage(sMessage);
+        //         return;
+        //     }
+
+        //     if (!this.checkMandatoryFields()) {
+        //         this.showErrorMessage(
+        //             this.getText("main.action.sendFault.mandatoryFields.msg")
+        //         );
+        //         return;
+        //     }
+
+        //     this.sendFault();
+        // },
+
         /*
-         * Validar autorización y campos obligatorios antes del envío.
-         */
+ * Validar autorización y campos obligatorios antes del envío.
+ */
         onSendPress: function () {
             if (!UserContext.isAllowed()) {
-                const sMessage = UserContext.getErrorMessage()
-                    || this.getText("main.action.userValidation.error.generic");
+                const sMessage = UserContext.getErrorMessage() ||
+                    this.getText("main.action.userValidation.error.generic");
 
                 this.showErrorMessage(sMessage);
                 return;
             }
 
-            if (!this.checkMandatoryFields()) {
-                this.showErrorMessage(
-                    this.getText("main.action.sendFault.mandatoryFields.msg")
+            const bMandatoryFieldsValid = this.checkMandatoryFields();
+
+            if (!bMandatoryFieldsValid) {
+                const oModel = this.getView().getModel(
+                    Constants.MODELS.DATA
                 );
+                const oFault = oModel.getProperty("/newFault") || {};
+                const sEquipmentSAP = String(
+                    oFault.equipmentSAP || ""
+                ).trim();
+                const sEquipmentIdentifier = String(
+                    oFault.number || ""
+                ).trim();
+                const bEquipmentResolved = Boolean(
+                    sEquipmentSAP
+                    && String(oFault.center || "").trim()
+                    && !oFault.equipmentSelectionRequired
+                );
+                const bEquipmentInactive = Boolean(
+                    bEquipmentResolved
+                    && oFault.equipmentActive === false
+                );
+
+                if (bEquipmentInactive) {
+                    const sEquipmentReference = sEquipmentIdentifier
+                        && sEquipmentIdentifier !== sEquipmentSAP
+                        ? `${sEquipmentSAP} (${sEquipmentIdentifier})`
+                        : sEquipmentSAP || sEquipmentIdentifier;
+
+                    this.showErrorMessage(
+                        this.getText(
+                            "main.action.sendFault.equipmentInactive",
+                            [sEquipmentReference]
+                        )
+                    );
+
+                    return;
+                }
+
+                this.showErrorMessage(
+                    this.getText(
+                        "main.action.sendFault.mandatoryFields.msg"
+                    )
+                );
+
                 return;
             }
 
@@ -508,8 +672,30 @@ sap.ui.define([
                 && String(oFault.center || "").trim()
                 && !oFault.equipmentSelectionRequired
             );
-            const bEquipmentValid = bEquipmentNumberValid && bEquipmentResolved;
+            const bEquipmentActive = oFault.equipmentActive === true;
+            const bEquipmentValid = Boolean(
+                bEquipmentNumberValid
+                && bEquipmentResolved
+                && bEquipmentActive
+            );
             const bDescriptionValid = this._hasUserDescription(oFault.description);
+
+
+            let sEquipmentValidationMessage;
+
+            if (!bEquipmentNumberValid) {
+                sEquipmentValidationMessage = this.getText(
+                    "main.validation.equipment.required"
+                );
+            } else if (bEquipmentResolved && !bEquipmentActive) {
+                sEquipmentValidationMessage = this.getText(
+                    "main.equipment.inactive"
+                );
+            } else {
+                sEquipmentValidationMessage = this.getText(
+                    "main.validation.equipment.invalid"
+                );
+            }
 
             this._setMandatoryFieldState(
                 "shortFaultInput",
@@ -526,9 +712,7 @@ sap.ui.define([
             this._setMandatoryFieldState(
                 "equipmentInput",
                 bEquipmentValid,
-                bEquipmentNumberValid
-                    ? this.getText("main.validation.equipment.invalid")
-                    : this.getText("main.validation.equipment.required")
+                sEquipmentValidationMessage
             );
 
             this._setMandatoryFieldState(
@@ -576,6 +760,7 @@ sap.ui.define([
 
             oModel.setProperty("/newFault/equipmentSAP", "");
             oModel.setProperty("/newFault/center", "");
+            oModel.setProperty("/newFault/equipmentActive", false);
             oModel.setProperty("/newFault/equipmentDescription", "");
             oModel.setProperty("/newFault/equipmentDescriptionState", "None");
             oModel.setProperty("/newFault/equipmentSelectionRequired", false);

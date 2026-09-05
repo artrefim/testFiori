@@ -96,16 +96,17 @@ sap.ui.define([
                 "main.list.item.description.defaultValue"
             );
             const oNewFault = {
-                center: "",
-                IsGolpeMalUso: false,
-                type: "",
                 shortFault: "",
+                type: "",
                 number: "",
                 equipmentSAP: "",
+                center: "",
+                equipmentActive: false,
                 equipmentDescription: "",
                 equipmentDescriptionState: "None",
                 equipmentSelectionRequired: false,
-                description: sDefaultDescription
+                description: sDefaultDescription,
+                IsGolpeMalUso: false
             };
 
             this.getView()
